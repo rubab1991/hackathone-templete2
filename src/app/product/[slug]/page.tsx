@@ -1,12 +1,15 @@
+// src/app/product/[slug]/page.tsx
+
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { GetServerSideProps } from "next";
 
 interface ProductPageProps {
-  product: Product | null;
+  params: {
+    slug: string;
+  };
 }
 
 const getProduct = async (slug: string): Promise<Product | null> => {
@@ -23,20 +26,10 @@ const getProduct = async (slug: string): Promise<Product | null> => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { slug } = params as { slug: string };
+const ProductPage = async ({ params }: ProductPageProps) => {
+  const { slug } = params;
   const product = await getProduct(slug);
 
-  if (!product) {
-    return { notFound: true }; // This will trigger a 404 page in case the product isn't found.
-  }
-
-  return {
-    props: { product },
-  };
-};
-
-const ProductPage = ({ product }: ProductPageProps) => {
   if (!product) {
     return <div>Product not found</div>;
   }
