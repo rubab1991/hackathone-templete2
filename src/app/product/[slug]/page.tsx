@@ -3,12 +3,13 @@ import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
+import { GetServerSideProps } from "next";
 
 interface ProductPageProps {
-  params: { slug: string };
+  product: Product | null;
 }
 
-async function getProduct(slug: string): Promise<Product | null> {
+const getProduct = async (slug: string): Promise<Product | null> => {
   return client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0]{
       _id,
@@ -20,15 +21,24 @@ async function getProduct(slug: string): Promise<Product | null> {
     }`,
     { slug }
   );
-}
+};
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const slug = params?.slug;
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { slug } = params as { slug: string };
   const product = await getProduct(slug);
 
   if (!product) {
-    // Trigger a 404 error by throwing an Error
-    throw new Error("Product not found");
+    return { notFound: true }; // This will trigger a 404 page in case the product isn't found.
+  }
+
+  return {
+    props: { product },
+  };
+};
+
+const ProductPage = ({ product }: ProductPageProps) => {
+  if (!product) {
+    return <div>Product not found</div>;
   }
 
   return (
@@ -56,4 +66,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
     </div>
   );
-}
+};
+
+export default ProductPage;
