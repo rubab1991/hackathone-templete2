@@ -1,4 +1,4 @@
-"use client";  // Ensure this is added at the top of your file
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { client } from "@/sanity/lib/client";
@@ -6,10 +6,10 @@ import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { useRouter } from "next/router";  // Use useRouter hook
+import { useParams } from "next/navigation"; // Use useParams from next/navigation
 
 interface ProductPageProps {
-  product: Product | null;
+  product?: Product | null;
 }
 
 const getProduct = async (slug: string): Promise<Product | null> => {
@@ -17,7 +17,6 @@ const getProduct = async (slug: string): Promise<Product | null> => {
     groq`*[_type == "product" && slug.current == $slug][0]{
       _id,
       name,
-      _type,
       image,
       price,
       description
@@ -27,21 +26,19 @@ const getProduct = async (slug: string): Promise<Product | null> => {
 };
 
 const ProductPage = ({ product }: ProductPageProps) => {
-  const router = useRouter();  // Use useRouter hook
-  const { slug } = router.query;  // Get slug from the URL query params
+  const { slug } = useParams(); // Get slug from URL params
 
-  const [productData, setProductData] = useState<Product | null>(product);
+  const [productData, setProductData] = useState<Product | null>(product ?? null);
 
-  // Ensure that slug is a string and hooks are always called unconditionally
   useEffect(() => {
     if (slug && !productData) {
       const fetchProduct = async () => {
-        const data = await getProduct(slug as string);  // Ensure slug is used as string
+        const data = await getProduct(slug as string);
         setProductData(data);
       };
       fetchProduct();
     }
-  }, [slug, productData]);  // This ensures that the effect runs when either the slug or productData changes
+  }, [slug, productData]);
 
   if (!productData) {
     return <div>Loading...</div>;
