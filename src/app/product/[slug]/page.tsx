@@ -6,7 +6,7 @@ import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { useRouter } from "next/router";  // Use this hook for routing
+import { useRouter } from "next/router";  // Use useRouter hook
 
 interface ProductPageProps {
   product: Product | null;
@@ -35,15 +35,16 @@ const ProductPage = ({ product }: ProductPageProps) => {
 
   const [productData, setProductData] = React.useState<Product | null>(product);
 
+  // UseEffect will always be called, ensuring consistent hook order
   React.useEffect(() => {
-    const fetchProduct = async () => {
-      const data = await getProduct(slug);
-      setProductData(data);
-    };
     if (!productData) {
+      const fetchProduct = async () => {
+        const data = await getProduct(slug);
+        setProductData(data);
+      };
       fetchProduct();
     }
-  }, [slug, productData]);
+  }, [slug, productData]);  // Re-run effect only when the slug or productData changes
 
   if (!productData) {
     return <div>Product not found</div>;
