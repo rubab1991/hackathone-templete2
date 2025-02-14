@@ -5,7 +5,9 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 
 interface ProductPageProps {
-  params: { slug: string };
+  params: {
+    slug: string;
+  };
 }
 
 async function getProduct(slug: string): Promise<Product | null> {
@@ -17,12 +19,12 @@ async function getProduct(slug: string): Promise<Product | null> {
       image,
       price,
       description
-    }`, 
+    }`,
     { slug }
   );
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+const ProductPage = async ({ params }: ProductPageProps) => {
   const { slug } = params;
   const product = await getProduct(slug);
 
@@ -55,4 +57,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
     </div>
   );
-}
+};
+
+export default ProductPage;
