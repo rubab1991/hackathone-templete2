@@ -4,12 +4,10 @@ import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 
-// Define the type for the props to be passed to the component
 interface ProductPageProps {
-  product: Product | null;
+  params: { slug: string };
 }
 
-// Fetch product data based on the slug
 async function getProduct(slug: string): Promise<Product | null> {
   return client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0]{
@@ -24,31 +22,10 @@ async function getProduct(slug: string): Promise<Product | null> {
   );
 }
 
-// Static generation: Define paths for dynamic routes
-export async function getStaticPaths() {
-  const products = await client.fetch(groq`*[_type == "product"]{slug}`);
-  const paths = products.map((product: { slug: { current: string } }) => ({
-    params: { slug: product.slug.current },
-  }));
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = params;
+  const product = await getProduct(slug);
 
-  return {
-    paths,
-    fallback: false, // If a product is not found, show 404
-  };
-}
-
-// Static generation: Fetch product data for each page
-export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const product = await getProduct(params.slug);
-
-  return {
-    props: {
-      product,
-    },
-  };
-}
-
-export default function ProductPage({ product }: ProductPageProps) {
   if (!product) {
     return <div className="text-center text-2xl font-bold">Product not found</div>;
   }
