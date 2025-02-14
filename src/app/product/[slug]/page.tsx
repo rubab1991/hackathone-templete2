@@ -3,10 +3,10 @@ import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { PageProps } from "next";
+import { GetServerSideProps } from "next";
 
-interface ProductPageProps extends PageProps {
-  params: { slug: string };
+interface ProductPageProps {
+  product: Product | null;
 }
 
 async function getProduct(slug: string): Promise<Product | null> {
@@ -23,9 +23,19 @@ async function getProduct(slug: string): Promise<Product | null> {
   );
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProduct(params.slug);
+// Using GetServerSideProps for server-side fetching
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const slug = params?.slug as string;
+  const product = await getProduct(slug);
 
+  return {
+    props: {
+      product,
+    },
+  };
+};
+
+export default function ProductPage({ product }: ProductPageProps) {
   if (!product) {
     return <div className="text-center text-2xl font-bold">Product not found</div>;
   }
@@ -33,6 +43,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <div className="max-w-7xl mx-auto px-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {/* Product Image */}
         <div className="aspect-square">
           {product.image && (
             <Image
@@ -44,6 +55,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             />
           )}
         </div>
+
+        {/* Product Details */}
         <div className="flex flex-col gap-8">
           <h1 className="text-4xl font-bold">{product.name}</h1>
           <p className="text-2xl font-sans">${product.price}</p>
