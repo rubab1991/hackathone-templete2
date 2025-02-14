@@ -17,12 +17,11 @@ async function getProduct(slug: string): Promise<Product | null> {
       image,
       price,
       description
-    }`,
+    }`, 
     { slug }
   );
 }
 
-// Define the ProductPage as an async function
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = params;
   const product = await getProduct(slug);
