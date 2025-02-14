@@ -3,10 +3,9 @@ import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { GetServerSideProps } from "next";
 
 interface ProductPageProps {
-  product: Product | null;
+  params: { slug: string };
 }
 
 async function getProduct(slug: string): Promise<Product | null> {
@@ -23,21 +22,13 @@ async function getProduct(slug: string): Promise<Product | null> {
   );
 }
 
-// Using GetServerSideProps for server-side fetching
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const slug = params?.slug as string;
+export default async function ProductPage({ params }: ProductPageProps) {
+  const slug = params?.slug;
   const product = await getProduct(slug);
 
-  return {
-    props: {
-      product,
-    },
-  };
-};
-
-export default function ProductPage({ product }: ProductPageProps) {
   if (!product) {
-    return <div className="text-center text-2xl font-bold">Product not found</div>;
+    // Trigger a 404 error by throwing an Error
+    throw new Error("Product not found");
   }
 
   return (
