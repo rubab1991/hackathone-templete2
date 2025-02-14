@@ -1,10 +1,12 @@
-import React from 'react';
+"use client";  // Make sure this is added at the top of your file 
+
+import React from "react";
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router";  // Use this hook for routing
 
 interface ProductPageProps {
   product: Product | null;
@@ -24,13 +26,12 @@ const getProduct = async (slug: string): Promise<Product | null> => {
   );
 };
 
-// Use React hook to fetch the product on demand
 const ProductPage = ({ product }: ProductPageProps) => {
-  const router = useRouter();
-  const { slug } = router.query; // Get slug from URL
+  const router = useRouter();  // Use useRouter hook
+  const { slug } = router.query;  // Get slug from the URL query params
 
   // Ensure that slug is a string
-  if (typeof slug !== 'string') return <div>Loading...</div>;
+  if (typeof slug !== "string") return <div>Loading...</div>;
 
   const [productData, setProductData] = React.useState<Product | null>(product);
 
