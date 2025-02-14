@@ -3,9 +3,8 @@ import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { PageProps } from "next";
 
-interface ProductPageProps extends PageProps {
+interface ProductPageProps {
   product: Product | null;
 }
 
@@ -24,20 +23,10 @@ const getProduct = async (slug: string): Promise<Product | null> => {
 };
 
 // No need for getServerSideProps in the new app directory structure
-export const getServerSideProps = async ({ params }: { params: { slug: string } }) => {
+const ProductPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
   const product = await getProduct(slug);
 
-  if (!product) {
-    return { notFound: true }; // This will trigger a 404 page in case the product isn't found.
-  }
-
-  return {
-    props: { product },
-  };
-};
-
-const ProductPage = ({ product }: ProductPageProps) => {
   if (!product) {
     return <div>Product not found</div>;
   }
