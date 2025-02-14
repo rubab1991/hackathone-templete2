@@ -1,6 +1,6 @@
-"use client";  // Make sure this is added at the top of your file 
+"use client";  // Make sure this is added at the top of your file
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
@@ -30,24 +30,21 @@ const ProductPage = ({ product }: ProductPageProps) => {
   const router = useRouter();  // Use useRouter hook
   const { slug } = router.query;  // Get slug from the URL query params
 
-  // Ensure that slug is a string
-  if (typeof slug !== "string") return <div>Loading...</div>;
+  const [productData, setProductData] = useState<Product | null>(product);
 
-  const [productData, setProductData] = React.useState<Product | null>(product);
-
-  // UseEffect will always be called, ensuring consistent hook order
-  React.useEffect(() => {
-    if (!productData) {
+  // Ensure that slug is a string and hooks are always called unconditionally
+  useEffect(() => {
+    if (slug && !productData) {
       const fetchProduct = async () => {
-        const data = await getProduct(slug);
+        const data = await getProduct(slug as string);  // Ensure slug is used as string
         setProductData(data);
       };
       fetchProduct();
     }
-  }, [slug, productData]);  // Re-run effect only when the slug or productData changes
+  }, [slug, productData]);  // This ensures that the effect runs when either the slug or productData changes
 
   if (!productData) {
-    return <div>Product not found</div>;
+    return <div>Loading...</div>;
   }
 
   return (
