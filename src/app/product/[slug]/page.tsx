@@ -1,10 +1,10 @@
+import React from 'react';
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { useRouter } from "next/router";
-import React from "react";
 
 interface ProductPageProps {
   product: Product | null;
@@ -29,19 +29,20 @@ const ProductPage = ({ product }: ProductPageProps) => {
   const router = useRouter();
   const { slug } = router.query; // Get slug from URL
 
-  // Check if slug is valid, then fetch data
-  if (!slug) return <div>Loading...</div>;
+  // Ensure that slug is a string
+  if (typeof slug !== 'string') return <div>Loading...</div>;
 
-  // Fetch the product data
-  const [productData, setProductData] = React.useState<Product | null>(null);
-  
+  const [productData, setProductData] = React.useState<Product | null>(product);
+
   React.useEffect(() => {
     const fetchProduct = async () => {
-      const data = await getProduct(slug as string);
+      const data = await getProduct(slug);
       setProductData(data);
     };
-    fetchProduct();
-  }, [slug]);
+    if (!productData) {
+      fetchProduct();
+    }
+  }, [slug, productData]);
 
   if (!productData) {
     return <div>Product not found</div>;
