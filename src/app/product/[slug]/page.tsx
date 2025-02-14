@@ -3,8 +3,9 @@ import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
+import { PageProps } from "next";
 
-interface ProductPageProps {
+interface ProductPageProps extends PageProps {
   params: { slug: string };
 }
 
@@ -13,6 +14,7 @@ async function getProduct(slug: string): Promise<Product | null> {
     groq`*[_type == "product" && slug.current == $slug][0]{
       _id,
       name,
+      _type,
       image,
       price,
       description
@@ -29,20 +31,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12">
-      {product.image && (
-        <Image
-          src={urlFor(product.image).url()}
-          alt={product.name}
-          width={400}
-          height={400}
-          className="rounded-lg shadow-md"
-        />
-      )}
-      <div className="flex flex-col gap-8">
-        <h1 className="text-4xl font-bold">{product.name}</h1>
-        <p className="text-2xl font-sans">${product.price}</p>
-        <p className="text-lg font-sans">{product.description}</p>
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="aspect-square">
+          {product.image && (
+            <Image
+              src={urlFor(product.image).url()}
+              alt={product.name}
+              width={400}
+              height={400}
+              className="rounded-lg shadow-md"
+            />
+          )}
+        </div>
+        <div className="flex flex-col gap-8">
+          <h1 className="text-4xl font-bold">{product.name}</h1>
+          <p className="text-2xl font-sans">${product.price}</p>
+          <p className="text-lg font-sans">{product.description}</p>
+        </div>
       </div>
     </div>
   );
