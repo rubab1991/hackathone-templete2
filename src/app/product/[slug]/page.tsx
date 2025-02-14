@@ -1,4 +1,4 @@
-"use client";  // Make sure this is added at the top of your file
+"use client";  // Ensure this is added at the top of your file
 
 import React, { useState, useEffect } from "react";
 import { client } from "@/sanity/lib/client";
@@ -8,12 +8,10 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { useRouter } from "next/router";  // Use useRouter hook
 
-// Define the type for product page props
 interface ProductPageProps {
   product: Product | null;
 }
 
-// Create the async function to fetch product data from the Sanity client
 const getProduct = async (slug: string): Promise<Product | null> => {
   return client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0]{
@@ -28,7 +26,6 @@ const getProduct = async (slug: string): Promise<Product | null> => {
   );
 };
 
-// The main ProductPage component
 const ProductPage = ({ product }: ProductPageProps) => {
   const router = useRouter();  // Use useRouter hook
   const { slug } = router.query;  // Get slug from the URL query params
