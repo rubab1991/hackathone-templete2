@@ -10,7 +10,7 @@ const Nav = () => {
       <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
       
       <Image src="/images/search.png" alt="search" width={20} height={20} />
-        <h1 className="text-xl font-bold">Avion</h1>
+        <h1 className="text-xl font-bold">Crafted Elegance</h1>
         <div className='flex gap-1'>
           <Link href="/shopping-cart">
         <Image src="/images/cart.png" alt="cart" width={20} height={20} />
