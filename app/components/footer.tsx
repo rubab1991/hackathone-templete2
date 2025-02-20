@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 
@@ -46,9 +47,11 @@ const Footer = () => {
               placeholder="your@email.com"
               className="p-2 rounded-l-md w-full bg-[#3C366B] placeholder-gray-400"
             />
+            <Link href="/login">
             <button className="bg-white text-[#2A254B] px-8 py-2 rounded-r-md font-light">
               Sign up
             </button>
+            </Link>
           </div>
         </div>
       </div>

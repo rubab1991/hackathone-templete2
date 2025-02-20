@@ -4,10 +4,19 @@ import Popular from "./Popular";
 import Join from "./join";
 import Link from "next/link";
 import Products from "./products";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 export default function Hero() {
-  return (
-    <div className="py-5">
+  return (<div>
+    <div className="mx-11">
+          <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            </div>
+    <div>
       {/* Hero Section */}
       <section className="container mx-auto px-6 py-12 flex flex-col lg:flex-row items-stretch">
         {/* Left Section */}
@@ -98,6 +107,7 @@ export default function Hero() {
 
       <Popular />
       <Join />
+    </div>
     </div>
   );
 }

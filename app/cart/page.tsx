@@ -1,6 +1,6 @@
 "use client"; // Ensure this is at the top
 
-import { Product } from "../../../types/products";
+import { Product } from "../../types/products";
 import React, { useEffect, useState } from "react";
 import {
   getCartItems,
@@ -8,9 +8,10 @@ import {
   updateCartQuantity,
 } from "../actions/actions";
 import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
+import { urlFor } from "../../sanity/lib/image";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation"
+import AuthGuard from "@/components/AuthGuard";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState<Product[]>([]);
@@ -61,6 +62,7 @@ const CartPage = () => {
   };
 
   return (
+    <AuthGuard>
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">Shopping Cart</h1>
 
@@ -112,6 +114,7 @@ const CartPage = () => {
         </div>
       )}
     </div>
+    </AuthGuard>
   );
 };
 

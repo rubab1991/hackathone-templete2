@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { Product } from "../../../types/products";
-import { allProducts } from "@/sanity/lib/queries";
-import { client } from "@/sanity/lib/client";
-import { urlFor } from "@/sanity/lib/image";
+import { Product } from "../../types/products";
+import { allProducts } from "../../sanity/lib/queries";
+import { client } from "../../sanity/lib/client";
+import { urlFor } from "../../sanity/lib/image";
 import Link from "next/link";
 import { addToCart } from "../actions/actions";
 import Swal from "sweetalert2";

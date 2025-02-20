@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { getCartItems } from "@/app/actions/actions";
+import { getCartItems } from "../../app/actions/actions";
 import Link from "next/link";
-import { Product } from "../../../types/products";
-import { urlFor } from "@/sanity/lib/image";
+import { Product } from "../../types/products";
+import { urlFor } from "../../sanity/lib/image";
 import { CgChevronRight } from "react-icons/cg";
 import { toast, ToastContainer } from "react-toastify"; // Update here
 import "react-toastify/dist/ReactToastify.css";
-import { client } from "@/sanity/lib/client";
+import { client } from "../../sanity/lib/client";
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState<Product[]>([]);

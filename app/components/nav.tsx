@@ -7,15 +7,16 @@ const Nav = () => {
        <div className=" bg-white">
      
       {/* Header */}
-      <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+      <div className="flex justify-around items-center px-6 py-4 border-b border-gray-200">
       
-      <Image src="/images/search.png" alt="search" width={20} height={20} />
-        <h1 className="text-xl font-bold">Crafted Elegance</h1>
+      
+        <h1 className="text-3xl font-bold ml-96">Crafted Elegance</h1>
         <div className='flex gap-1'>
-          <Link href="/shopping-cart">
-        <Image src="/images/cart.png" alt="cart" width={20} height={20} />
+          <Link href="/cart">
+        <Image src="/images/cart.png" alt="cart" width={25} height={25} />
         </Link>
-        <Image src="/images/user.png" alt="cart" width={20} height={20} />
+
+
         </div>
         </div>
      <ul className="space-x-12 items-center sm:text-base lg:text-lg flex justify-center">

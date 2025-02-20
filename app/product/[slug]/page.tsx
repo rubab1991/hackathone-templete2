@@ -1,11 +1,11 @@
 "use client";
 
 
-import { client } from "@/sanity/lib/client";
+import { client } from "../../../sanity/lib/client";
 import { groq } from "next-sanity";
-import { Product } from "../../../../types/products";
+import { Product } from "../../../types/products";
 import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
+import { urlFor } from "../../../sanity/lib/image";
 
 
 interface ProductPageProps {

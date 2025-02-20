@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const Join = () => {
@@ -19,9 +20,11 @@ const Join = () => {
             placeholder="Enter your email"
             className="w-full max-w-md px-4 py-3 border rounded-lg border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#4E4D93] focus:border-transparent"
           />
+          <Link href="/login">
           <button className="px-6 py-3 bg-[#4E4D93] text-white rounded-lg hover:bg-[#3C366B]">
             Join Now
           </button>
+          </Link>
         </div>
       </div>
     </div>
