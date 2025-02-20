@@ -13,7 +13,7 @@ const Nav = () => {
         <h1 className="text-3xl font-bold ml-96">Crafted Elegance</h1>
         <div className='flex gap-1'>
           <Link href="/cart">
-        <Image src="/images/cart.png" alt="cart" width={25} height={25} />
+        <Image src="/images/cart.png" alt="cart" width={20} height={20} />
         </Link>
 
 
