@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Product } from "../../types/products";
 import { urlFor } from "../../sanity/lib/image";
 import { CgChevronRight } from "react-icons/cg";
-import { toast, ToastContainer } from "react-toastify"; // Update here
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { client } from "../../sanity/lib/client";
 
@@ -63,10 +63,12 @@ export default function CheckoutPage() {
       city: !formValues.city,
       zipCode: !formValues.zipCode,
       phone: !formValues.phone,
-      email: !formValues.email };
+      email: !formValues.email,
+    };
     setFormErrors(errors);
     return Object.values(errors).every((error) => !error);
   };
+
   const handlePlaceOrder = async () => {
     if (validateForm()) {
       const orderData = {
@@ -86,9 +88,9 @@ export default function CheckoutPage() {
         discount: discount,
         orderDate: new Date().toISOString(),
       };
-  
+
       try {
-        console.log("Sending order data:", orderData);  // Add this line for debugging
+        console.log("Sending order data:", orderData);
         await client.create(orderData);
         localStorage.removeItem("appliedDiscount");
         toast.success("Order placed successfully!");
@@ -100,9 +102,9 @@ export default function CheckoutPage() {
       toast.error("Please fill in all the fields.");
     }
   };
-  
+
   return (
-    <div className={`min-h-screen bg-gray-50`}>
+    <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
       <div className="mt-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -173,101 +175,23 @@ export default function CheckoutPage() {
           <div className="bg-white border rounded-lg p-6 space-y-6">
             <h2 className="text-xl font-semibold">Billing Information</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="firstName">First Name</label>
-                <input
-                  id="firstName"
-                  placeholder="Enter your first name"
-                  value={formValues.firstName}
-                  onChange={handleInputChange}
-                  className={`border ${formErrors.firstName ? 'border-red-500' : ''}`}
-                />
-                {formErrors.firstName && (
-                  <p className="text-sm text-red-500">
-                    First name is required.
-                  </p>
-                )}
-              </div>
-              <div>
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  id="lastName"
-                  placeholder="Enter your last name"
-                  value={formValues.lastName}
-                  onChange={handleInputChange}
-                  className={`border ${formErrors.lastName ? 'border-red-500' : ''}`}
-                />
-                {formErrors.lastName && (
-                  <p className="text-sm text-red-500">
-                    Last name is required.
-                  </p>
-                )}
-              </div>
-            </div>
-            <div>
-              <label htmlFor="address">Address</label>
-              <input
-                id="address"
-                placeholder="Enter your address"
-                value={formValues.address}
-                onChange={handleInputChange}
-                className={`border ${formErrors.address ? 'border-red-500' : ''}`}
-              />
-              {formErrors.address && (
-                <p className="text-sm text-red-500">Address is required.</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="city">City</label>
-              <input
-                id="city"
-                placeholder="Enter your city"
-                value={formValues.city}
-                onChange={handleInputChange}
-                className={`border ${formErrors.city ? 'border-red-500' : ''}`}
-              />
-              {formErrors.city && (
-                <p className="text-sm text-red-500">City is required.</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="zipCode">Zip Code</label>
-              <input
-                id="zipCode"
-                placeholder="Enter your zip code"
-                value={formValues.zipCode}
-                onChange={handleInputChange}
-                className={`border ${formErrors.zipCode ? 'border-red-500' : ''}`}
-              />
-              {formErrors.zipCode && (
-                <p className="text-sm text-red-500">Zip Code is required.</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="phone">Phone</label>
-              <input
-                id="phone"
-                placeholder="Enter your phone number"
-                value={formValues.phone}
-                onChange={handleInputChange}
-                className={`border ${formErrors.phone ? 'border-red-500' : ''}`}
-              />
-              {formErrors.phone && (
-                <p className="text-sm text-red-500">Phone is required.</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input
-                id="email"
-                placeholder="Enter your email address"
-                value={formValues.email}
-                onChange={handleInputChange}
-                className={`border ${formErrors.email ? 'border-red-500' : ''}`}
-              />
-              {formErrors.email && (
-                <p className="text-sm text-red-500">Email is required.</p>
-              )}
+              {Object.keys(formValues).map((key) => (
+                <div key={key} className="col-span-1">
+                  <label htmlFor={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+                  <input
+                    id={key}
+                    placeholder={`Enter your ${key}`}
+                    value={formValues[key as keyof typeof formValues]}
+                    onChange={handleInputChange}
+                    className={`w-full border ${formErrors[key as keyof typeof formErrors] ? 'border-red-500' : ''}`}
+                  />
+                  {formErrors[key as keyof typeof formErrors] && (
+                    <p className="text-sm text-red-500">
+                      {key.charAt(0).toUpperCase() + key.slice(1)} is required.
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
             <button
               className="w-full h-12 bg-blue-500 hover:bg-blue-700 text-white"
